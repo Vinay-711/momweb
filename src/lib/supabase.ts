@@ -14,20 +14,22 @@ const getEnvVar = (key: string): string => {
 const supabaseUrl =
   getEnvVar('VITE_SUPABASE_URL') ||
   getEnvVar('NEXT_PUBLIC_SUPABASE_URL') ||
-  'https://qklgjmpjucqgufsvuqhl.supabase.co';
+  '';
 
 const supabaseAnonKey =
   getEnvVar('VITE_SUPABASE_PUBLISHABLE_KEY') ||
   getEnvVar('VITE_SUPABASE_ANON_KEY') ||
   getEnvVar('NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY') ||
-  'sb_publishable_Lh3GLbvV-76wx8LoLr5HmQ_lRS0YEsI';
+  '';
 
 export const isSupabaseConfigured = (): boolean => {
   return Boolean(
     supabaseUrl &&
     supabaseAnonKey &&
     supabaseUrl.startsWith('http') &&
-    !supabaseUrl.includes('your-supabase-url')
+    !supabaseUrl.includes('your-supabase-url') &&
+    !supabaseUrl.includes('qklgjmpjucqgufsvuqhl') &&
+    !supabaseUrl.includes('example.supabase.co')
   );
 };
 

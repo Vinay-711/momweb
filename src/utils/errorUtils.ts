@@ -32,6 +32,10 @@ const SENSITIVE_ERROR_PATTERNS = [
   /jwt/i,
   /postgrest/i,
   /postgres/i,
+  /failed to fetch/i,
+  /fetch failed/i,
+  /network\s?error/i,
+  /load failed/i,
 ];
 
 /**
