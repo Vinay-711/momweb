@@ -1,0 +1,13 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Private/transactional pages
+Disallow: /admin/
+Disallow: /cart
+Disallow: /checkout
+Disallow: /order-confirmation/
+Disallow: /track
+
+# Sitemap
+Sitemap: https://padmasfloral.com/sitemap.xml

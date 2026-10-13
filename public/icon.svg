@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#143D2B" />
+      <stop offset="100%" stop-color="#0B2419" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F4DA7E" />
+      <stop offset="50%" stop-color="#D4AF37" />
+      <stop offset="100%" stop-color="#AA820A" />
+    </linearGradient>
+    <filter id="goldShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#bgGrad)" />
+  <rect x="24" y="24" width="464" height="464" rx="92" stroke="url(#goldGrad)" stroke-width="6" opacity="0.8" />
+  <rect x="36" y="36" width="440" height="440" rx="80" stroke="#F4DA7E" stroke-width="1.5" opacity="0.3" />
+
+  <g transform="translate(370, 120)">
+    <circle cx="0" cy="0" r="22" fill="#C84B5B" />
+    <circle cx="-16" cy="-12" r="16" fill="url(#goldGrad)" />
+    <circle cx="16" cy="-10" r="14" fill="#E27D8C" />
+    <circle cx="0" cy="-22" r="12" fill="#FCF9F6" />
+    <circle cx="0" cy="0" r="6" fill="#D4AF37" />
+  </g>
+
+  <text 
+    x="242" 
+    y="355" 
+    text-anchor="middle" 
+    font-family="'Playfair Display', Georgia, serif" 
+    font-size="300" 
+    font-weight="700" 
+    fill="url(#goldGrad)" 
+    filter="url(#goldShadow)"
+  >P</text>
+  
+  <circle cx="256" cy="425" r="7" fill="url(#goldGrad)" />
+  <circle cx="236" cy="425" r="4" fill="#C84B5B" opacity="0.8" />
+  <circle cx="276" cy="425" r="4" fill="#C84B5B" opacity="0.8" />
+</svg>

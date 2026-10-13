@@ -1,0 +1,241 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+
+  --color-brand-green: #143D2B;
+  --color-brand-green-light: #1E5A3F;
+  --color-brand-green-dark: #0B2419;
+  --color-brand-gold: #D4AF37;
+  --color-brand-gold-light: #F3E5AB;
+  --color-brand-rose: #C84B5B;
+  --color-brand-rose-soft: #FDF2F4;
+  --color-brand-cream: #FCF9F6;
+  --color-brand-sand: #F7EFE8;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #FCF9F6;
+  color: #1F2937;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-serif);
+  letter-spacing: -0.015em;
+}
+
+/* Custom subtle scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7EFE8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D4AF37;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B89728;
+}
+
+/* Mobile viewport bottom bar safe area padding */
+.pb-safe {
+  padding-bottom: max(env(safe-area-inset-bottom, 0px), 1rem);
+}
+.pt-safe {
+  padding-top: max(env(safe-area-inset-top, 0px), 0.5rem);
+}
+.mb-safe {
+  margin-bottom: max(env(safe-area-inset-bottom, 0px), 1rem);
+}
+
+/* Touch target helper enforcing minimum 44x44px tappable dimensions */
+.touch-target-44 {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ensure smooth native momentum scrolling on mobile */
+.momentum-scroll {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+}
+
+/* Prevent accidental horizontal blowout across all screen sizes */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Prevent iOS Safari from auto-zooming when focusing text fields */
+@media (max-width: 640px) {
+  input[type="text"],
+  input[type="tel"],
+  input[type="email"],
+  input[type="number"],
+  input[type="password"],
+  input[type="search"],
+  input[type="date"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* PWA standalone mode adjustments */
+@media all and (display-mode: standalone) {
+  body {
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  input, textarea, [contenteditable="true"] {
+    user-select: text;
+    -webkit-user-select: text;
+  }
+}
+
+/* ==========================================================================
+   WCAG 2.2 AA ACCESSIBILITY FOUNDATIONS
+   ========================================================================== */
+
+/* 1. Universal Visible Focus Indicator (WCAG 2.4.7 & 2.4.11) */
+:focus-visible {
+  outline: 2px solid #143D2B !important;
+  outline-offset: 2px !important;
+}
+
+/* High-contrast focus outline on dark brand sections, dark cards, & colored buttons */
+.bg-\[\#143D2B\] :focus-visible,
+.bg-\[\#0B2419\] :focus-visible,
+.bg-\[\#113525\] :focus-visible,
+.bg-\[\#1e5a3f\] :focus-visible,
+.bg-stone-900 :focus-visible,
+.bg-stone-800 :focus-visible,
+[data-theme="dark"] :focus-visible,
+button.bg-\[\#143D2B\]:focus-visible,
+a.bg-\[\#143D2B\]:focus-visible,
+button.bg-\[\#0B2419\]:focus-visible,
+a.bg-\[\#0B2419\]:focus-visible,
+button.bg-\[\#C84B5B\]:focus-visible,
+a.bg-\[\#C84B5B\]:focus-visible,
+button.bg-stone-900:focus-visible,
+a.bg-stone-900:focus-visible {
+  outline: 2px solid #D4AF37 !important;
+  outline-offset: 2px !important;
+}
+
+button.bg-\[\#25D366\]:focus-visible,
+a.bg-\[\#25D366\]:focus-visible {
+  outline: 2px solid #0B2419 !important;
+  outline-offset: 2px !important;
+}
+
+/* 2. Skip to Main Content Link (WCAG 2.4.1 Bypass Blocks) */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background-color: #143D2B;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: 0.75rem;
+  border: 2px solid #D4AF37;
+  text-decoration: none;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  transition: top 0.15s ease-in-out;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 1rem;
+  outline: 2px solid #D4AF37 !important;
+  outline-offset: 2px !important;
+}
+
+/* 3. Screen Reader Only Utility (.sr-only) */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.not-sr-only {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+}
+
+/* 4. Respect User Motion Preferences (WCAG 2.3.3 Animation from Interactions) */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   ELEGANT SKELETON SHIMMER LOADERS
+   ========================================================================== */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(231, 229, 228, 0.7) 0%,
+    rgba(245, 245, 244, 0.95) 50%,
+    rgba(231, 229, 228, 0.7) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s infinite ease-in-out;
+}
+
