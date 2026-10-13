@@ -12,6 +12,7 @@ import {
 import * as whatsappService from '../../services/whatsappService';
 import {
   BUSINESS_ADDRESS,
+  BUSINESS_COORDINATES,
   BUSINESS_PHONE,
   BUSINESS_HOURS,
   GOOGLE_MAPS_DIRECTIONS_URL
@@ -55,7 +56,8 @@ export const LocalQuickActions: React.FC<LocalQuickActionsProps> = ({
               <div className="flex items-center gap-1.5 text-stone-700">
                 <MapPin className="w-3.5 h-3.5 text-[#C84B5B] flex-shrink-0" aria-hidden="true" />
                 <span>
-                  Address: <strong>{BUSINESS_ADDRESS}</strong>
+                  Address: <strong>{BUSINESS_ADDRESS}</strong>{' '}
+                  <span className="font-mono text-[11px] text-stone-500 hidden sm:inline">({BUSINESS_COORDINATES.dms})</span>
                 </span>
               </div>
 

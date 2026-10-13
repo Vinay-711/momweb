@@ -5,6 +5,7 @@ import { Instagram } from '../ui/InstagramIcon';
 import * as whatsappService from '../../services/whatsappService';
 import {
   BUSINESS_ADDRESS,
+  BUSINESS_COORDINATES,
   BUSINESS_PHONE,
   BUSINESS_WHATSAPP,
   BUSINESS_HOURS,
@@ -81,8 +82,9 @@ export const Footer: React.FC = () => {
               <li className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#C84B5B] flex-shrink-0 mt-1" />
                 <div>
-                  <span className="text-stone-200 font-medium">Location:</span>
+                  <span className="text-stone-200 font-medium">Workshop Location:</span>
                   <p>{BUSINESS_ADDRESS}, Ramanagara</p>
+                  <p className="text-[11px] font-mono text-stone-400 mt-0.5">{BUSINESS_COORDINATES.dms}</p>
                   <a
                     href={GOOGLE_MAPS_DIRECTIONS_URL}
                     target="_blank"

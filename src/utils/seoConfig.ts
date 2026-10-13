@@ -21,6 +21,11 @@ export const BUSINESS_CITY = 'Ramanagara';
 export const BUSINESS_PINCODE = '562159';
 export const BUSINESS_STATE = 'Karnataka';
 export const BUSINESS_COUNTRY = 'IN';
+export const BUSINESS_COORDINATES = {
+  latitude: 12.730667,
+  longitude: 77.284833,
+  dms: '12°43\'50.4"N 77°17\'05.4"E',
+};
 export const BUSINESS_PHONE = '+91 9740030159';
 export const BUSINESS_PHONE_RAW = '9740030159';
 export const BUSINESS_WHATSAPP = '+91 7676117596';
@@ -30,13 +35,16 @@ export const BUSINESS_INSTAGRAM_URL = 'https://www.instagram.com/__vinxy_/';
 export const BUSINESS_EMAIL = 'padmasfloral@gmail.com';
 export const BUSINESS_HOURS = '24/7';
 export const GOOGLE_MAPS_SEARCH_URL =
-  'https://www.google.com/maps/search/?api=1&query=Padma%27s+Floral+Ramanagara+Town+Karnataka';
+  'https://www.google.com/maps?q=12.730667,77.284833';
 export const GOOGLE_MAPS_DIRECTIONS_URL =
-  'https://www.google.com/maps/dir/?api=1&destination=Padma%27s+Floral+Ramanagara+Town+Karnataka';
+  'https://www.google.com/maps/dir/?api=1&destination=12.730667,77.284833';
+export const GOOGLE_MAPS_EMBED_URL =
+  'https://maps.google.com/maps?q=12.730667,77.284833&hl=en&z=17&output=embed';
 
 export const DEFAULT_TITLE = "Padma's Floral | All Types of Flower Decorations | Ramanagara & Bengaluru";
 export const DEFAULT_DESCRIPTION =
   'All types of flower decorations. Delivery in Ramanagara and Bengaluru. Prices depend on the seasons. Open 24/7. Order via call or WhatsApp at 7676117596.';
+
 
 /** Default OG image — hero or brand image used when no page-specific image exists. */
 export const DEFAULT_OG_IMAGE =
@@ -132,11 +140,11 @@ export function buildLocalBusinessJsonLd(data: LocalBusinessData): object {
     postalCode: data.pincode || BUSINESS_PINCODE,
   };
 
-  // Geo coordinates for Ramanagara, Karnataka
+  // Geo coordinates for Ramanagara, Karnataka (12°43'50.4"N 77°17'05.4"E)
   schema.geo = {
     '@type': 'GeoCoordinates',
-    latitude: 12.7209,
-    longitude: 77.2799,
+    latitude: BUSINESS_COORDINATES.latitude,
+    longitude: BUSINESS_COORDINATES.longitude,
   };
 
   // Real social media profile

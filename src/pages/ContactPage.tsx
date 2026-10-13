@@ -23,6 +23,7 @@ import {
   buildLocalBusinessJsonLd,
   canonicalUrl,
   BUSINESS_ADDRESS,
+  BUSINESS_COORDINATES,
   BUSINESS_HOURS,
   BUSINESS_PHONE,
   BUSINESS_WHATSAPP,
@@ -196,6 +197,7 @@ export const ContactPage: React.FC = () => {
                 <div>
                   <h3 className="font-serif font-bold text-base text-stone-900">Workshop & Store</h3>
                   <p className="text-xs text-stone-600">{BUSINESS_ADDRESS}, Ramanagara</p>
+                  <p className="text-[11px] font-mono text-stone-500 font-medium mt-0.5">{BUSINESS_COORDINATES.dms}</p>
                 </div>
               </div>
               <a
@@ -203,7 +205,7 @@ export const ContactPage: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="touch-target-44 inline-flex items-center gap-1.5 bg-[#4285F4] hover:bg-[#3367d6] text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-xs transition-colors focus-visible:ring-2 focus-visible:ring-[#4285F4]"
-                aria-label="Get Directions to Ramanagara Town on Google Maps"
+                aria-label="Get Directions to Padma's Floral on Google Maps"
               >
                 <Navigation className="w-3.5 h-3.5" aria-hidden="true" />
                 <span>Directions</span>
@@ -211,7 +213,7 @@ export const ContactPage: React.FC = () => {
             </div>
             <div className="pt-2 border-t border-stone-100 text-xs text-stone-600 space-y-1">
               <p className="font-bold text-stone-800">Delivery Areas:</p>
-              <p>• Ramanagara</p>
+              <p>• Ramanagara Town & surrounding areas</p>
               <p>• Bengaluru</p>
             </div>
           </div>

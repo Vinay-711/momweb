@@ -15,19 +15,21 @@ import { Instagram } from '../ui/InstagramIcon';
 import * as whatsappService from '../../services/whatsappService';
 import {
   BUSINESS_ADDRESS,
+  BUSINESS_COORDINATES,
   BUSINESS_PHONE,
   BUSINESS_WHATSAPP,
   BUSINESS_HOURS,
   BUSINESS_INSTAGRAM,
   BUSINESS_INSTAGRAM_URL,
   GOOGLE_MAPS_SEARCH_URL,
-  GOOGLE_MAPS_DIRECTIONS_URL
+  GOOGLE_MAPS_DIRECTIONS_URL,
+  GOOGLE_MAPS_EMBED_URL
 } from '../../utils/seoConfig';
 
 export const GoogleBusinessSection: React.FC = () => {
-  const [copiedType, setCopiedType] = useState<'address' | 'phone' | null>(null);
+  const [copiedType, setCopiedType] = useState<'address' | 'phone' | 'coords' | null>(null);
 
-  const handleCopy = (text: string, type: 'address' | 'phone') => {
+  const handleCopy = (text: string, type: 'address' | 'phone' | 'coords') => {
     navigator.clipboard.writeText(text);
     setCopiedType(type);
     setTimeout(() => {
@@ -41,13 +43,13 @@ export const GoogleBusinessSection: React.FC = () => {
       aria-label="Location and Business Information"
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16"
     >
-      <div className="bg-[#0E2F21] text-white rounded-2xl p-6 sm:p-10 lg:p-12 shadow-xl relative overflow-hidden border border-emerald-900/60">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+      <div className="bg-[#0E2F21] text-white rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl relative overflow-hidden border border-emerald-900/60">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start relative z-10">
           {/* Left Column: Heading, Information & Action CTAs */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 bg-white/10 px-3.5 py-1.5 rounded-full border border-white/15 text-xs font-semibold text-[#F3E5AB]">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Padma's Floral • Ramanagara & Bengaluru</span>
+              <span>Padma's Floral • Ramanagara Town</span>
             </div>
 
             <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight text-white leading-tight">
@@ -55,7 +57,7 @@ export const GoogleBusinessSection: React.FC = () => {
             </h2>
 
             <p className="text-stone-300 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto lg:mx-0 font-light">
-              Located in Ramanagara Town. We provide all types of flower decorations with delivery across Ramanagara and Bengaluru. Open 24/7. Prices depend on the seasons.
+              Located in Ramanagara Town at GPS coordinates <strong>{BUSINESS_COORDINATES.dms}</strong>. We provide all types of flower decorations with fast delivery across Ramanagara and Bengaluru. Open 24/7. Prices depend on the seasons.
             </p>
 
             {/* Quick trust metrics */}
@@ -68,6 +70,11 @@ export const GoogleBusinessSection: React.FC = () => {
               <div className="flex items-center gap-1.5 text-xs text-stone-200">
                 <MapPin className="w-4 h-4 text-[#EA4335]" aria-hidden="true" />
                 <span>Ramanagara Town</span>
+              </div>
+
+              <div className="flex items-center gap-1.5 text-xs text-stone-200 font-mono">
+                <Navigation className="w-3.5 h-3.5 text-[#4285F4]" aria-hidden="true" />
+                <span>{BUSINESS_COORDINATES.dms}</span>
               </div>
 
               <a
@@ -127,18 +134,27 @@ export const GoogleBusinessSection: React.FC = () => {
                 <ShoppingBag className="w-4 h-4" aria-hidden="true" />
                 <span>Browse Products</span>
               </Link>
+            </div>
 
-              {/* Supporting CTA: View on Google */}
-              <a
-                href={GOOGLE_MAPS_SEARCH_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="touch-target-44 min-h-[48px] inline-flex items-center justify-center gap-2 bg-white/15 hover:bg-white/25 text-white border border-white/20 px-5 py-3 rounded-xl font-bold text-xs sm:text-sm shadow-xs transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-stone-900"
-                aria-label="View Padma's Floral on Google Maps"
-              >
-                <span>View on Maps</span>
-                <ExternalLink className="w-3.5 h-3.5" aria-hidden="true" />
-              </a>
+            {/* Interactive Embedded Google Map with Accurate Pin */}
+            <div className="pt-2">
+              <div className="rounded-2xl overflow-hidden border border-white/20 shadow-md h-56 sm:h-72 relative bg-stone-900">
+                <iframe
+                  title="Padma's Floral exact location pin in Ramanagara Town"
+                  src={GOOGLE_MAPS_EMBED_URL}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen={false}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="w-full h-full opacity-90 hover:opacity-100 transition-opacity"
+                />
+                <div className="absolute top-2.5 left-2.5 bg-stone-900/90 backdrop-blur-xs text-white text-[11px] font-mono px-3 py-1 rounded-lg border border-white/15 flex items-center gap-1.5 shadow-xs">
+                  <MapPin className="w-3.5 h-3.5 text-[#EA4335]" />
+                  <span>{BUSINESS_COORDINATES.dms}</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -165,8 +181,8 @@ export const GoogleBusinessSection: React.FC = () => {
                 </div>
               </div>
 
-              {/* Verified Details (Address, Hours, Phone, Instagram) with 1-Click Copy */}
-              <div className="space-y-3.5 text-xs text-stone-700">
+              {/* Verified Details (Address, GPS Coordinates, Hours, Phone, Instagram) with 1-Click Copy */}
+              <div className="space-y-3 text-xs text-stone-700">
                 {/* Physical Address */}
                 <div className="flex items-start justify-between gap-3 p-2.5 rounded-xl hover:bg-stone-50 transition-colors">
                   <div className="flex items-start gap-2.5">
@@ -175,7 +191,7 @@ export const GoogleBusinessSection: React.FC = () => {
                       <span className="font-bold text-stone-900">Address:</span>
                       <p className="text-stone-700 font-medium">{BUSINESS_ADDRESS}</p>
                       <p className="text-[11px] text-stone-600 mt-0.5">
-                        Delivery: Ramanagara and Bengaluru
+                        Delivery across Ramanagara & Bengaluru
                       </p>
                     </div>
                   </div>
@@ -187,6 +203,35 @@ export const GoogleBusinessSection: React.FC = () => {
                     aria-label="Copy workshop address"
                   >
                     {copiedType === 'address' ? (
+                      <span className="text-emerald-600 flex items-center gap-1 text-[11px] font-bold">
+                        <Check className="w-3.5 h-3.5" aria-hidden="true" /> Copied
+                      </span>
+                    ) : (
+                      <Copy className="w-3.5 h-3.5" aria-hidden="true" />
+                    )}
+                  </button>
+                </div>
+
+                {/* GPS Coordinates */}
+                <div className="flex items-start justify-between gap-3 p-2.5 rounded-xl hover:bg-stone-50 transition-colors bg-stone-50/70 border border-stone-200/60">
+                  <div className="flex items-start gap-2.5">
+                    <Navigation className="w-4 h-4 text-[#4285F4] flex-shrink-0 mt-0.5" aria-hidden="true" />
+                    <div>
+                      <span className="font-bold text-stone-900">GPS Coordinates:</span>
+                      <p className="text-stone-800 font-mono text-[11px] font-semibold">{BUSINESS_COORDINATES.dms}</p>
+                      <p className="text-[10px] text-stone-500 mt-0.5">
+                        {BUSINESS_COORDINATES.latitude}, {BUSINESS_COORDINATES.longitude}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy(BUSINESS_COORDINATES.dms, 'coords')}
+                    className="touch-target-44 p-1.5 text-stone-500 hover:text-stone-800 rounded-lg hover:bg-stone-200 transition-colors flex-shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#143D2B]"
+                    title="Copy GPS coordinates"
+                    aria-label="Copy GPS coordinates"
+                  >
+                    {copiedType === 'coords' ? (
                       <span className="text-emerald-600 flex items-center gap-1 text-[11px] font-bold">
                         <Check className="w-3.5 h-3.5" aria-hidden="true" /> Copied
                       </span>
