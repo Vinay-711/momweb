@@ -16,6 +16,10 @@ import {
   ChevronUp,
   ShoppingBag,
   WifiOff,
+  QrCode,
+  Copy,
+  Check,
+  Smartphone,
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNetworkStatus } from '../hooks/useNetworkStatus';
@@ -71,6 +75,8 @@ export const CheckoutPage: React.FC = () => {
   const [cardMessage, setCardMessage] = useState('');
   const [orderNotes, setOrderNotes] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('upi');
+  const [upiUtr, setUpiUtr] = useState('');
+  const [copiedUpi, setCopiedUpi] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isMobileSummaryOpen, setIsMobileSummaryOpen] = useState(false);
@@ -173,6 +179,11 @@ export const CheckoutPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
+      const combinedNotes = [
+        orderNotes.trim(),
+        paymentMethod === 'upi' && upiUtr.trim() ? `UPI Ref/UTR: ${upiUtr.trim()}` : null,
+      ].filter(Boolean).join(' | ');
+
       const order = await orderService.createOrder(
         {
           customer_name: customerName.trim(),
@@ -187,7 +198,7 @@ export const CheckoutPage: React.FC = () => {
           delivery_date: deliveryDate,
           delivery_time_slot: deliverySlot,
           card_message: cardMessage.trim() || undefined,
-          order_notes: orderNotes.trim() || undefined,
+          order_notes: combinedNotes || undefined,
           payment_method: paymentMethod,
         },
         cart
@@ -611,13 +622,13 @@ export const CheckoutPage: React.FC = () => {
                 <div className="flex items-center gap-3 sm:gap-0 sm:justify-between">
                   <CreditCard className="w-5 h-5 text-[#143D2B] flex-shrink-0" aria-hidden="true" />
                   <div className="sm:hidden">
-                    <p className="text-xs font-bold text-stone-900">UPI / GPay / PhonePe</p>
-                    <p className="text-[10px] text-stone-600">Pay online via QR/UPI</p>
+                    <p className="text-xs font-bold text-stone-900">Pay Online (UPI / QR)</p>
+                    <p className="text-[10px] text-stone-600">Scan & pay with any UPI app</p>
                   </div>
                 </div>
                 <div className="hidden sm:block">
-                  <p className="text-xs font-bold text-stone-900">UPI / GPay / PhonePe</p>
-                  <p className="text-[10px] text-stone-600 mt-0.5">Pay online via QR/UPI</p>
+                  <p className="text-xs font-bold text-stone-900">Pay Online (UPI / QR)</p>
+                  <p className="text-[10px] text-stone-600 mt-0.5">Scan & pay with any UPI app</p>
                 </div>
                 <input
                   type="radio"
@@ -685,6 +696,127 @@ export const CheckoutPage: React.FC = () => {
                 />
               </label>
             </div>
+
+            {/* UPI QR CODE DISPLAY CARD */}
+            {paymentMethod === 'upi' && (
+              <div className="mt-4 p-4 sm:p-6 rounded-2xl bg-[#f8faf8] border border-[#143D2B]/20 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-stone-200/80">
+                  <div className="flex items-center gap-2.5">
+                    <span className="p-2 rounded-xl bg-[#143D2B] text-white flex-shrink-0">
+                      <QrCode className="w-4 h-4" aria-hidden="true" />
+                    </span>
+                    <div>
+                      <h4 className="text-sm font-bold text-stone-900">Scan & Pay Online via Any UPI App</h4>
+                      <p className="text-[11px] text-stone-600">Google Pay • PhonePe • Paytm • BHIM • Cred • Any Banking App</p>
+                    </div>
+                  </div>
+                  <div className="inline-flex items-center gap-1.5 self-start sm:self-auto bg-emerald-50 text-[#143D2B] px-3.5 py-1.5 rounded-full text-xs font-bold border border-emerald-200 shadow-2xs">
+                    <span>Payable: {totalAmount > 0 ? `₹${totalAmount}` : 'Seasonal Pricing'}</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+                  {/* QR Image Box */}
+                  <div className="md:col-span-5 flex flex-col items-center">
+                    <div className="bg-white p-3.5 rounded-2xl border border-stone-200 shadow-xs w-full max-w-[220px] text-center">
+                      <img
+                        src="/images/upi-qr-code.png"
+                        alt="Vinxy _ UPI QR Code vinayshravani711@oksbi"
+                        className="w-full h-auto rounded-xl object-contain mx-auto"
+                        width="200"
+                        height="260"
+                      />
+                      <p className="text-[10px] text-stone-600 font-medium mt-2 pt-2 border-t border-stone-100">
+                        Scan with GPay / PhonePe / Paytm
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Payment Info & Copy Action */}
+                  <div className="md:col-span-7 space-y-3.5">
+                    <div className="bg-white p-3.5 rounded-xl border border-stone-200 space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-stone-700 font-medium">Beneficiary Name</span>
+                        <span className="font-bold text-stone-900">Vinxy _</span>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs pt-2 border-t border-stone-100">
+                        <span className="text-stone-700 font-medium">Total Payable</span>
+                        <span className="font-bold text-sm text-[#143D2B]">
+                          {totalAmount > 0 ? `₹${totalAmount}` : 'Seasonal Pricing'}
+                        </span>
+                      </div>
+
+                      <div className="space-y-1 pt-2 border-t border-stone-100">
+                        <span className="text-[10px] font-bold text-stone-600 uppercase tracking-wider block">
+                          UPI ID
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs sm:text-sm font-bold text-[#143D2B] bg-stone-50 px-2.5 py-1.5 rounded-lg border border-stone-200 truncate flex-1 select-all">
+                            vinayshravani711@oksbi
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (navigator.clipboard) {
+                                navigator.clipboard.writeText('vinayshravani711@oksbi');
+                                setCopiedUpi(true);
+                                setTimeout(() => setCopiedUpi(false), 2000);
+                              }
+                            }}
+                            className="touch-target-44 text-xs font-semibold bg-[#143D2B] hover:bg-[#1e5a3f] text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 flex-shrink-0"
+                            aria-label="Copy UPI ID"
+                          >
+                            {copiedUpi ? (
+                              <>
+                                <Check className="w-3.5 h-3.5" />
+                                <span>Copied</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3.5 h-3.5" />
+                                <span>Copy</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Mobile intent link */}
+                    <a
+                      href={`upi://pay?pa=vinayshravani711@oksbi&pn=Vinxy%20Padma%20Floral&am=${totalAmount}&cu=INR`}
+                      className="md:hidden flex items-center justify-center gap-2 w-full py-2.5 px-4 bg-[#143D2B] hover:bg-[#1a4a35] text-white rounded-xl text-xs font-semibold shadow-xs transition-colors"
+                    >
+                      <Smartphone className="w-4 h-4" />
+                      <span>Tap to Open UPI App (₹{totalAmount})</span>
+                    </a>
+
+                    {/* Optional UTR / Reference No */}
+                    <div className="space-y-1">
+                      <label htmlFor="upi-utr-input" className="text-xs font-medium text-stone-700 block">
+                        UPI Transaction ID / UTR Number <span className="text-stone-600 font-normal">(Optional)</span>
+                      </label>
+                      <input
+                        id="upi-utr-input"
+                        type="text"
+                        value={upiUtr}
+                        onChange={(e) => setUpiUtr(e.target.value)}
+                        placeholder="e.g. 12-digit UTR from your UPI payment"
+                        className="w-full text-xs px-3 py-2 rounded-xl border border-stone-200 bg-white focus:outline-none focus:ring-1 focus:ring-[#143D2B] text-stone-800 placeholder:text-stone-400 font-mono"
+                      />
+                    </div>
+
+                    <div className="p-3 rounded-xl bg-amber-50/80 border border-amber-200 text-xs text-amber-900 flex items-start gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-amber-700 flex-shrink-0 mt-0.5" />
+                      <p className="leading-relaxed">
+                        Once you've completed your payment, click <strong>"Place Flower Order"</strong> below to confirm. You will instantly receive your order confirmation and reference number.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </fieldset>
         </div>
 

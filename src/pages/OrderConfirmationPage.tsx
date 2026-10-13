@@ -11,7 +11,10 @@ import {
   Sparkles,
   Phone,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
+  QrCode,
+  Copy,
+  Check
 } from 'lucide-react';
 import { orderService } from '../services/orderService';
 import * as whatsappService from '../services/whatsappService';
@@ -33,6 +36,7 @@ export const OrderConfirmationPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [copiedUpi, setCopiedUpi] = useState(false);
 
   const loadOrder = async () => {
     if (!orderNumber) return;
@@ -343,6 +347,122 @@ export const OrderConfirmationPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Online UPI Payment QR Box for Pending/UPI Orders */}
+      {order.payment_method === 'upi' && (
+        <div className="bg-white p-5 sm:p-7 rounded-2xl sm:rounded-3xl border border-[#143D2B]/20 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-stone-200">
+            <div className="flex items-center gap-2.5">
+              <span className="p-2 rounded-xl bg-[#143D2B] text-white flex-shrink-0">
+                <QrCode className="w-5 h-5" aria-hidden="true" />
+              </span>
+              <div>
+                <h3 className="font-serif font-bold text-base sm:text-lg text-stone-900">
+                  Online UPI Payment Details
+                </h3>
+                <p className="text-xs text-stone-600">
+                  Scan the QR code below or pay via UPI ID to confirm your floral dispatch
+                </p>
+              </div>
+            </div>
+            <div className="inline-flex items-center gap-1.5 self-start sm:self-auto bg-emerald-50 text-[#143D2B] px-3.5 py-1.5 rounded-full text-xs font-bold border border-emerald-200 shadow-2xs">
+              <span>Amount: ₹{order.total_amount}</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center pt-1">
+            {/* QR Image Box */}
+            <div className="md:col-span-5 flex flex-col items-center">
+              <div className="bg-stone-50 p-3.5 rounded-2xl border border-stone-200 shadow-xs w-full max-w-[220px] text-center">
+                <img
+                  src="/images/upi-qr-code.png"
+                  alt="Vinxy _ UPI QR Code vinayshravani711@oksbi"
+                  className="w-full h-auto rounded-xl object-contain mx-auto"
+                  width="200"
+                  height="260"
+                />
+                <p className="text-[10px] text-stone-600 font-medium mt-2 pt-2 border-t border-stone-200">
+                  Scan with GPay / PhonePe / Paytm / BHIM
+                </p>
+              </div>
+            </div>
+
+            {/* UPI Details & WhatsApp Confirmation */}
+            <div className="md:col-span-7 space-y-3.5">
+              <div className="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-2.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-stone-700 font-medium">Beneficiary Name</span>
+                  <span className="font-bold text-stone-900">Vinxy _</span>
+                </div>
+
+                <div className="flex items-center justify-between text-xs pt-2 border-t border-stone-200">
+                  <span className="text-stone-700 font-medium">Payable Amount</span>
+                  <span className="font-bold text-base text-[#143D2B]">
+                    ₹{order.total_amount}
+                  </span>
+                </div>
+
+                <div className="space-y-1 pt-2 border-t border-stone-200">
+                  <span className="text-[10px] font-bold text-stone-600 uppercase tracking-wider block">
+                    UPI ID
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-xs sm:text-sm font-bold text-[#143D2B] bg-white px-2.5 py-1.5 rounded-lg border border-stone-200 truncate flex-1 select-all">
+                      vinayshravani711@oksbi
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (navigator.clipboard) {
+                          navigator.clipboard.writeText('vinayshravani711@oksbi');
+                          setCopiedUpi(true);
+                          setTimeout(() => setCopiedUpi(false), 2000);
+                        }
+                      }}
+                      className="touch-target-44 text-xs font-semibold bg-[#143D2B] hover:bg-[#1e5a3f] text-white px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 flex-shrink-0"
+                      aria-label="Copy UPI ID"
+                    >
+                      {copiedUpi ? (
+                        <>
+                          <Check className="w-3.5 h-3.5" />
+                          <span>Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Copy</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
+                <a
+                  href={`upi://pay?pa=vinayshravani711@oksbi&pn=Vinxy%20_&am=${order.total_amount}&cu=INR&tn=Order%20${order.order_number}`}
+                  className="touch-target-44 inline-flex md:hidden items-center justify-center gap-2 bg-[#143D2B] hover:bg-[#1e5a3f] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs"
+                >
+                  <span>Pay Now in UPI App</span>
+                </a>
+                <a
+                  href={`https://wa.me/917676117596?text=${encodeURIComponent(`Hi Vinxy Floral Studio, I have placed Order #${order.order_number} (₹${order.total_amount}). Here is my payment confirmation screenshot.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="touch-target-44 inline-flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#20bd5a] text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs flex-1"
+                >
+                  <MessageCircle className="w-4 h-4 flex-shrink-0" />
+                  <span>Send Payment Screenshot on WhatsApp</span>
+                </a>
+              </div>
+
+              <p className="text-[11px] text-stone-700 leading-relaxed">
+                ℹ️ Once paid, our florist team verifies the transfer and immediately commences preparing your fresh garland/arrangement for delivery.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Items Itemization */}
       <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-stone-200 shadow-xs space-y-4">
