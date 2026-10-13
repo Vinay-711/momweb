@@ -272,9 +272,18 @@ export function getAdminOrderModalUrl(order: Partial<Order>, siteOrigin: string)
 }
 
 /**
+ * Returns a click-to-chat URL for custom decoration quotes (e.g., Varmalas, Car Decor, Stage).
+ */
+export function getCustomQuoteUrl(serviceType: string): string {
+  const msg = `Namaskara ${_cachedBusinessName}! 🌸\nI would like to get a custom quote for *${serviceType}*.\nPlease share available designs, seasonal rates, and booking slots for Ramanagara / Bengaluru.`;
+  return getChatUrl(msg);
+}
+
+/**
  * Returns a click-to-chat URL for contact form inquiries.
  */
 export function getContactInquiryUrl(name: string, phone: string, city: string, message: string): string {
   const msg = `Namaskara ${_cachedBusinessName}! 🌸\n\n*Name:* ${name}\n*Phone:* ${phone}\n*City:* ${city}\n\n*Message:* ${message}`;
   return getChatUrl(msg);
 }
+
